@@ -37,7 +37,6 @@
     margin: 12px 0;
   }
 
-  /* First question */
   .question {
     font-family: 'Pacifico', cursive;
     color: #ff3366;
@@ -45,24 +44,22 @@
     margin-bottom: 14px;
   }
 
-  /* YES text */
   .yes-text {
     font-family: 'Lobster', cursive;
-    font-size: 36px;
+    font-size: 38px;
     color: #ff3366;
   }
 
-  /* Happy Valentine text */
   .final-text {
     font-family: 'Pacifico', cursive;
-    font-size: 28px;
+    font-size: 32px;
     color: #ff3366;
-    margin-top: 6px;
+    margin-top: 8px;
   }
 
   .buttons {
     position: relative;
-    height: 160px;
+    height: 170px;
     margin-top: 24px;
   }
 
@@ -93,7 +90,6 @@
     top: 90px;
   }
 
-  /* Floating hearts */
   .heart {
     position: absolute;
     font-size: 22px;
@@ -105,7 +101,6 @@
     to { transform: translateY(-120vh); opacity: 0; }
   }
 
-  /* Confetti */
   .confetti {
     position: fixed;
     width: 8px;
@@ -140,57 +135,68 @@
 </script>
 
 <div class="container" id="card">
-
-  <!-- FIRST SCREEN -->
   <img src="Bear1.gif" alt="cute bear">
-
   <div class="question">Will you be my Valentine? 💖</div>
 
   <div class="buttons">
     <button id="yesBtn" onclick="yesClicked()">Yes 💕</button>
-    <button id="noBtn" onmouseover="moveNo()" ontouchstart="moveNo()">No 🙃</button>
+    <button id="noBtn" onclick="noClicked()">No 🙃</button>
   </div>
-
 </div>
 
-<audio id="bgMusic" loop preload="auto" playsinline>
+<!-- Background Music (starts immediately, soft) -->
+<audio id="bgMusic" loop autoplay playsinline>
   <source src="innerbloom.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-  function moveNo() {
+  const noTexts = [
+    "No 🙃",
+    "Are you sure? 😶",
+    "Really sure? 🥺",
+    "Think again 💭",
+    "Don’t do this 😢",
+    "My heart 😭",
+    "Pleaseee 💔",
+    "I’ll cry 🥹",
+    "Last chance 😶‍🌫️",
+    "Okay… fine 😔"
+  ];
+
+  let noCount = 0;
+
+  function noClicked() {
     const noBtn = document.getElementById("noBtn");
     const box = document.querySelector(".buttons");
 
-    const padding = 20;
-    const maxX = box.clientWidth - noBtn.offsetWidth - padding;
-    const maxY = box.clientHeight - noBtn.offsetHeight - padding;
+    if (noCount < noTexts.length - 1) {
+      noCount++;
+      noBtn.innerText = noTexts[noCount];
 
-    noBtn.style.left = Math.random() * maxX + "px";
-    noBtn.style.top = Math.random() * maxY + "px";
-    noBtn.style.transform = "none";
+      const offsetX = 20 * noCount;
+      const offsetY = 10 * noCount;
+
+      noBtn.style.left = `calc(50% + ${offsetX}px)`;
+      noBtn.style.top = `${90 + offsetY}px`;
+      noBtn.style.transform = "translateX(-50%)";
+    }
   }
 
   function launchConfetti() {
     const colors = ["#ff3366","#ffcc00","#66ccff","#99ffcc","#ff99cc"];
-    for (let i = 0; i < 120; i++) {
+    for (let i = 0; i < 160; i++) {
       const c = document.createElement("div");
       c.className = "confetti";
       c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      c.style.setProperty("--x", (Math.random() * 700 - 350) + "px");
-      c.style.setProperty("--y", (Math.random() * 700 - 350) + "px");
+      c.style.setProperty("--x", (Math.random() * 800 - 400) + "px");
+      c.style.setProperty("--y", (Math.random() * 800 - 400) + "px");
       document.body.appendChild(c);
       setTimeout(() => c.remove(), 3000);
     }
   }
 
   function yesClicked() {
-    const music = document.getElementById("bgMusic");
-    music.volume = 0.7;
-    music.play().catch(() => {});
-
     launchConfetti();
-
     document.getElementById("card").innerHTML = `
       <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
         <div class="yes-text">💖 YES 💖</div>
