@@ -3,62 +3,77 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>💖💖💖💖💖💖💖💖💖</title>
+<title>Valentine 💖</title>
 
-<!-- Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Lobster&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
   body {
     margin: 0;
     height: 100vh;
     background: linear-gradient(to top, #ffd1dc, #ffe6eb);
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Quicksand', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
   }
 
-  .card {
-    background: rgba(255,255,255,0.97);
-    width: 92%;
-    max-width: 420px;
-    padding: 38px 26px;
-    border-radius: 32px;
+  .container {
     text-align: center;
-    box-shadow: 0 25px 55px rgba(0,0,0,0.18);
+    padding: 30px;
+    width: 90%;
+    max-width: 380px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 28px;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.15);
     position: relative;
-    z-index: 2;
+    z-index: 5;
   }
 
-  h1 {
+  img {
+    width: 150px;
+    margin: 12px 0;
+  }
+
+  /* First question */
+  .question {
     font-family: 'Pacifico', cursive;
+    color: #ff3366;
+    font-size: 30px;
+    margin-bottom: 14px;
+  }
+
+  /* YES text */
+  .yes-text {
+    font-family: 'Lobster', cursive;
     font-size: 36px;
     color: #ff3366;
-    margin-bottom: 12px;
   }
 
-  p {
-    font-size: 18px;
+  /* Happy Valentine text */
+  .final-text {
+    font-family: 'Pacifico', cursive;
+    font-size: 28px;
     color: #ff3366;
-    margin-bottom: 26px;
-    font-weight: 500;
+    margin-top: 6px;
   }
 
   .buttons {
     position: relative;
-    height: 180px;
+    height: 160px;
+    margin-top: 24px;
   }
 
   button {
-    padding: 16px 36px;
-    font-size: 18px;
-    border-radius: 40px;
+    padding: 14px 30px;
+    font-size: 16px;
     border: none;
+    border-radius: 32px;
     cursor: pointer;
     position: absolute;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Quicksand', sans-serif;
     font-weight: 600;
   }
 
@@ -93,8 +108,8 @@
   /* Confetti */
   .confetti {
     position: fixed;
-    width: 10px;
-    height: 16px;
+    width: 8px;
+    height: 14px;
     top: 50%;
     left: 50%;
     z-index: 9999;
@@ -106,29 +121,6 @@
       transform: translate(var(--x), var(--y)) rotate(720deg);
       opacity: 0;
     }
-  }
-
-  /* SECOND PAGE STYLES */
-  .yes-line {
-    font-family: 'Pacifico', cursive;
-    font-size: 30px;
-    color: #ff3366;
-    margin-bottom: 6px;
-  }
-
-  .yes-word {
-    font-family: 'Pacifico', cursive;
-    font-size: 42px;
-    background: linear-gradient(45deg, #ff3366, #ff7aa2);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 16px;
-  }
-
-  .final-text {
-    font-family: 'Pacifico', cursive;
-    font-size: 32px;
-    color: #ff3366;
   }
 </style>
 </head>
@@ -147,54 +139,64 @@
   }, 450);
 </script>
 
-<div class="card" id="card">
-  <h1>Happy Valentine 💖</h1>
-  <p>Will you be my Valentine?</p>
+<div class="container" id="card">
+
+  <!-- FIRST SCREEN -->
+  <img src="Bear1.gif" alt="cute bear">
+
+  <div class="question">Will you be my Valentine, Naveen? 💖</div>
 
   <div class="buttons">
     <button id="yesBtn" onclick="yesClicked()">Yes 💕</button>
     <button id="noBtn" onmouseover="moveNo()" ontouchstart="moveNo()">No 🙃</button>
   </div>
+
 </div>
+
+<audio id="bgMusic" loop preload="auto" playsinline>
+  <source src="innerbloom.mp3" type="audio/mpeg">
+</audio>
 
 <script>
   function moveNo() {
     const noBtn = document.getElementById("noBtn");
     const box = document.querySelector(".buttons");
 
-    const maxX = box.clientWidth - noBtn.offsetWidth - 20;
-    const maxY = box.clientHeight - noBtn.offsetHeight - 20;
+    const padding = 20;
+    const maxX = box.clientWidth - noBtn.offsetWidth - padding;
+    const maxY = box.clientHeight - noBtn.offsetHeight - padding;
 
-    let x, y;
-    do {
-      x = Math.random() * maxX;
-      y = Math.random() * maxY;
-    } while (x > maxX / 3 && x < (2 * maxX) / 3);
-
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
+    noBtn.style.left = Math.random() * maxX + "px";
+    noBtn.style.top = Math.random() * maxY + "px";
     noBtn.style.transform = "none";
   }
 
   function launchConfetti() {
-    const colors = ["#ff3366","#ffcc00","#66ccff","#99ffcc","#ff99cc","#ff6f91"];
-    for (let i = 0; i < 220; i++) {
+    const colors = ["#ff3366","#ffcc00","#66ccff","#99ffcc","#ff99cc"];
+    for (let i = 0; i < 120; i++) {
       const c = document.createElement("div");
       c.className = "confetti";
       c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      c.style.setProperty("--x", (Math.random() * 1000 - 500) + "px");
-      c.style.setProperty("--y", (Math.random() * 1000 - 500) + "px");
+      c.style.setProperty("--x", (Math.random() * 700 - 350) + "px");
+      c.style.setProperty("--y", (Math.random() * 700 - 350) + "px");
       document.body.appendChild(c);
       setTimeout(() => c.remove(), 3000);
     }
   }
 
   function yesClicked() {
+    const music = document.getElementById("bgMusic");
+    music.volume = 0.7;
+    music.play().catch(() => {});
+
     launchConfetti();
+
     document.getElementById("card").innerHTML = `
-      <div class="yes-line">I knew you’d click</div>
-      <div class="yes-word">YES 💖</div>
-      <div class="final-text">Happy Valentine’s Day 🎉💕</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+        <div class="yes-text">💖 YES 💖</div>
+        <img src="Bear2.gif" alt="happy bear">
+        <div class="final-text">Happy Valentine’s Day 💕</div>
+      </div>
     `;
   }
 </script>
