@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Valentine 💖</title>
 
-<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Lobster&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
@@ -29,7 +28,6 @@
     border-radius: 28px;
     box-shadow: 0 20px 45px rgba(0,0,0,0.15);
     position: relative;
-    z-index: 5;
   }
 
   img {
@@ -44,35 +42,22 @@
     margin-bottom: 14px;
   }
 
-  .yes-text {
-    font-family: 'Lobster', cursive;
-    font-size: 38px;
-    color: #ff3366;
-  }
-
-  .final-text {
-    font-family: 'Pacifico', cursive;
-    font-size: 32px;
-    color: #ff3366;
-    margin-top: 8px;
-  }
-
   .buttons {
     position: relative;
-    height: 180px;
-    margin-top: 26px;
+    height: 170px;
+    margin-top: 24px;
   }
 
   button {
     padding: 14px 30px;
     font-size: 16px;
-    border: none;
     border-radius: 32px;
+    border: none;
     cursor: pointer;
     position: absolute;
     font-family: 'Quicksand', sans-serif;
     font-weight: 600;
-    transition: all 0.25s ease;
+    transition: left 0.25s ease, top 0.25s ease;
   }
 
   #yesBtn {
@@ -89,17 +74,6 @@
     left: 50%;
     transform: translateX(-50%);
     top: 90px;
-  }
-
-  .heart {
-    position: absolute;
-    font-size: 22px;
-    animation: floatUp 6s infinite;
-  }
-
-  @keyframes floatUp {
-    from { transform: translateY(0); opacity: 1; }
-    to { transform: translateY(-120vh); opacity: 0; }
   }
 
   .confetti {
@@ -123,38 +97,22 @@
 
 <body>
 
-<!-- Floating hearts -->
-<script>
-  setInterval(() => {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = Math.random() > 0.5 ? "💖" : "💕";
-    heart.style.left = Math.random() * 100 + "vw";
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 6000);
-  }, 450);
-</script>
-
 <div class="container" id="card">
   <img src="Bear1.gif" alt="cute bear">
   <div class="question">Will you be my Valentine? 💖</div>
 
-  <div class="buttons">
+  <div class="buttons" id="btnBox">
     <button id="yesBtn" onclick="yesClicked()">Yes 💕</button>
     <button id="noBtn" onclick="noClicked()">No 🙃</button>
   </div>
 </div>
 
-<!-- Music -->
 <audio id="bgMusic" loop preload="auto">
   <source src="innerbloom.mp3" type="audio/mpeg">
 </audio>
 
 <script>
   const music = document.getElementById("bgMusic");
-  music.volume = 0.6;
-  music.muted = true;
-  music.play().catch(()=>{});
 
   const noTexts = [
     "No 🙃",
@@ -170,54 +128,64 @@
   ];
 
   let noCount = 0;
+  let musicStarted = false;
 
-  function unmuteMusic() {
-    if (music.muted) {
-      music.muted = false;
+  function startMusic() {
+    if (!musicStarted) {
+      music.volume = 0.6;
+      music.play().catch(() => {});
+      musicStarted = true;
     }
   }
 
   function noClicked() {
-    unmuteMusic();
+    startMusic();
 
     const noBtn = document.getElementById("noBtn");
+    const box = document.getElementById("btnBox");
 
     if (noCount < noTexts.length - 1) {
       noCount++;
       noBtn.textContent = noTexts[noCount];
     }
 
-    // Move FARTHER each time
-    const moveX = 40 * noCount;   // stronger right shift
-    const moveY = 12 * noCount;   // gentle down
+    const maxX = box.clientWidth - noBtn.offsetWidth;
+    const maxY = box.clientHeight - noBtn.offsetHeight;
 
-    noBtn.style.left = `calc(50% + ${moveX}px)`;
-    noBtn.style.top = `${90 + moveY}px`;
-    noBtn.style.transform = "translateX(-50%)";
+    // keep it far from YES (center top)
+    let x, y;
+    do {
+      x = Math.random() * maxX;
+      y = 60 + Math.random() * (maxY - 60);
+    } while (Math.abs(x - maxX / 2) < 70);
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+    noBtn.style.transform = "none";
   }
 
   function launchConfetti() {
     const colors = ["#ff3366","#ffcc00","#66ccff","#99ffcc","#ff99cc"];
-    for (let i = 0; i < 180; i++) {
+    for (let i = 0; i < 160; i++) {
       const c = document.createElement("div");
       c.className = "confetti";
       c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      c.style.setProperty("--x", (Math.random() * 900 - 450) + "px");
-      c.style.setProperty("--y", (Math.random() * 900 - 450) + "px");
+      c.style.setProperty("--x", (Math.random() * 800 - 400) + "px");
+      c.style.setProperty("--y", (Math.random() * 800 - 400) + "px");
       document.body.appendChild(c);
       setTimeout(() => c.remove(), 3000);
     }
   }
 
   function yesClicked() {
-    unmuteMusic();
+    startMusic();
     launchConfetti();
 
     document.getElementById("card").innerHTML = `
-      <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
-        <div class="yes-text">💖 YES 💖</div>
-        <img src="Bear2.gif" alt="happy bear">
-        <div class="final-text">Happy Valentine’s Day 💕</div>
+      <div style="text-align:center">
+        <h1 style="font-family:Pacifico;font-size:36px;color:#ff3366">YES 💖</h1>
+        <img src="Bear2.gif" width="150">
+        <h2 style="font-family:Pacifico;font-size:30px;color:#ff3366">Happy Valentine’s Day 💕</h2>
       </div>
     `;
   }
