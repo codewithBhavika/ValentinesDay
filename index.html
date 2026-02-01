@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Valentine 💖</title>
+<title>💖💖💖💖💖💖💖💖💖</title>
 
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
@@ -21,22 +21,22 @@
   }
 
   .card {
-    background: rgba(255,255,255,0.96);
+    background: rgba(255,255,255,0.97);
     width: 92%;
     max-width: 420px;
-    padding: 36px 26px;
-    border-radius: 30px;
+    padding: 38px 26px;
+    border-radius: 32px;
     text-align: center;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+    box-shadow: 0 25px 55px rgba(0,0,0,0.18);
     position: relative;
     z-index: 2;
   }
 
   h1 {
     font-family: 'Pacifico', cursive;
-    font-size: 34px;
+    font-size: 36px;
     color: #ff3366;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
 
   p {
@@ -52,7 +52,7 @@
   }
 
   button {
-    padding: 16px 34px;
+    padding: 16px 36px;
     font-size: 18px;
     border-radius: 40px;
     border: none;
@@ -98,7 +98,7 @@
     top: 50%;
     left: 50%;
     z-index: 9999;
-    animation: burst 2.8s ease-out forwards;
+    animation: burst 3s ease-out forwards;
   }
 
   @keyframes burst {
@@ -106,6 +106,29 @@
       transform: translate(var(--x), var(--y)) rotate(720deg);
       opacity: 0;
     }
+  }
+
+  /* SECOND PAGE STYLES */
+  .yes-line {
+    font-family: 'Pacifico', cursive;
+    font-size: 30px;
+    color: #ff3366;
+    margin-bottom: 6px;
+  }
+
+  .yes-word {
+    font-family: 'Pacifico', cursive;
+    font-size: 42px;
+    background: linear-gradient(45deg, #ff3366, #ff7aa2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 16px;
+  }
+
+  .final-text {
+    font-family: 'Pacifico', cursive;
+    font-size: 32px;
+    color: #ff3366;
   }
 </style>
 </head>
@@ -143,8 +166,6 @@
     const maxY = box.clientHeight - noBtn.offsetHeight - 20;
 
     let x, y;
-
-    // force BIG jumps, avoid center
     do {
       x = Math.random() * maxX;
       y = Math.random() * maxY;
@@ -157,23 +178,23 @@
 
   function launchConfetti() {
     const colors = ["#ff3366","#ffcc00","#66ccff","#99ffcc","#ff99cc","#ff6f91"];
-
-    for (let i = 0; i < 200; i++) {
+    for (let i = 0; i < 220; i++) {
       const c = document.createElement("div");
       c.className = "confetti";
       c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
       c.style.setProperty("--x", (Math.random() * 1000 - 500) + "px");
       c.style.setProperty("--y", (Math.random() * 1000 - 500) + "px");
       document.body.appendChild(c);
-      setTimeout(() => c.remove(), 2800);
+      setTimeout(() => c.remove(), 3000);
     }
   }
 
   function yesClicked() {
     launchConfetti();
     document.getElementById("card").innerHTML = `
-      <h1>I knew you’d click YES 💖</h1>
-      <p>Happy Valentine’s Day 🎉💕</p>
+      <div class="yes-line">I knew you’d click</div>
+      <div class="yes-word">YES 💖</div>
+      <div class="final-text">Happy Valentine’s Day 🎉💕</div>
     `;
   }
 </script>
