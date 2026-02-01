@@ -59,7 +59,7 @@
     transition: all 0.3s ease;
   }
 
-  /* YES BUTTON */
+  /* YES button */
   #yesBtn {
     background: linear-gradient(45deg, #ff3366, #ff5f7e);
     color: white;
@@ -70,12 +70,12 @@
   }
 
   @keyframes pulse {
-    0% { transform: translateX(-50%) scale(1); }
-    50% { transform: translateX(-50%) scale(1.05); }
+    0%   { transform: translateX(-50%) scale(1); }
+    50%  { transform: translateX(-50%) scale(1.05); }
     100% { transform: translateX(-50%) scale(1); }
   }
 
-  /* NO BUTTON */
+  /* NO button */
   #noBtn {
     background: #eee;
     color: #444;
@@ -84,19 +84,20 @@
     top: 100px;
   }
 
-  /* CONFETTI + HEARTS */
+  /* Slow heart confetti */
   .confetti {
     position: fixed;
     top: 50%;
     left: 50%;
-    font-size: 16px;
-    animation: burst 3s ease-out forwards;
+    font-size: 20px;
+    opacity: 1;
+    animation: slowBurst 5s ease-out forwards;
     z-index: 9999;
   }
 
-  @keyframes burst {
+  @keyframes slowBurst {
     to {
-      transform: translate(var(--x), var(--y)) rotate(720deg);
+      transform: translate(var(--x), var(--y)) rotate(360deg);
       opacity: 0;
     }
   }
@@ -105,16 +106,13 @@
     font-family: 'Pacifico', cursive;
     font-size: 32px;
     color: #ff3366;
-    margin-top: 8px;
+    margin-top: 10px;
   }
 
-  .share-btn {
-    margin-top: 18px;
-    background: #ff3366;
-    color: white;
-    padding: 12px 26px;
-    border-radius: 28px;
-    font-size: 15px;
+  .yes-text {
+    font-family: 'Lobster', cursive;
+    font-size: 38px;
+    color: #ff3366;
   }
 </style>
 </head>
@@ -175,7 +173,7 @@
       noBtn.textContent = noTexts[noCount];
     }
 
-    // Move NO safely
+    // Move NO safely inside box
     const maxX = box.clientWidth - noBtn.offsetWidth;
     const maxY = box.clientHeight - noBtn.offsetHeight;
 
@@ -189,21 +187,21 @@
     noBtn.style.top = y + "px";
     noBtn.style.transform = "none";
 
-    // Grow YES (subtle)
+    // Grow YES slowly
     yesScale = Math.min(yesScale + 0.04, 1.25);
     yesBtn.style.transform = `translateX(-50%) scale(${yesScale})`;
   }
 
   function launchConfetti() {
-    const emojis = ["🎉","💖","💕","🎊","💘"];
-    for (let i = 0; i < 180; i++) {
+    const emojis = ["💖","💕","💘","💞","💗"];
+    for (let i = 0; i < 120; i++) {
       const c = document.createElement("div");
       c.className = "confetti";
       c.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-      c.style.setProperty("--x", (Math.random() * 900 - 450) + "px");
-      c.style.setProperty("--y", (Math.random() * 900 - 450) + "px");
+      c.style.setProperty("--x", (Math.random() * 600 - 300) + "px");
+      c.style.setProperty("--y", (Math.random() * 600 - 300) + "px");
       document.body.appendChild(c);
-      setTimeout(() => c.remove(), 3000);
+      setTimeout(() => c.remove(), 5000);
     }
   }
 
@@ -213,24 +211,11 @@
 
     document.getElementById("card").innerHTML = `
       <div style="display:flex;flex-direction:column;align-items:center;">
-        <h1 style="font-family:Pacifico;font-size:36px;color:#ff3366">YES 💖</h1>
+        <div class="yes-text">💖 YES 💖</div>
         <img src="Bear2.gif" width="150">
         <div class="final-text">Happy Valentine’s Day 💕</div>
-        <button class="share-btn" onclick="sharePage()">Share this page 💌</button>
       </div>
     `;
-  }
-
-  function sharePage() {
-    if (navigator.share) {
-      navigator.share({
-        title: "Valentine 💖",
-        text: "I made something cute for you 💕",
-        url: window.location.href
-      });
-    } else {
-      alert("Copy and share the link 💕");
-    }
   }
 </script>
 
