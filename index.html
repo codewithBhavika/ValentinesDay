@@ -24,10 +24,9 @@
     padding: 30px;
     width: 90%;
     max-width: 380px;
-    background: rgba(255,255,255,0.95);
+    background: rgba(255,255,255,0.96);
     border-radius: 28px;
     box-shadow: 0 20px 45px rgba(0,0,0,0.15);
-    position: relative;
   }
 
   img {
@@ -39,12 +38,12 @@
     font-family: 'Pacifico', cursive;
     color: #ff3366;
     font-size: 30px;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
   }
 
   .buttons {
     position: relative;
-    height: 170px;
+    height: 180px;
     margin-top: 24px;
   }
 
@@ -57,33 +56,42 @@
     position: absolute;
     font-family: 'Quicksand', sans-serif;
     font-weight: 600;
-    transition: left 0.25s ease, top 0.25s ease;
+    transition: all 0.3s ease;
   }
 
+  /* YES BUTTON */
   #yesBtn {
     background: linear-gradient(45deg, #ff3366, #ff5f7e);
     color: white;
     left: 50%;
     transform: translateX(-50%);
     top: 0;
+    animation: pulse 1.6s infinite;
   }
 
+  @keyframes pulse {
+    0% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.05); }
+    100% { transform: translateX(-50%) scale(1); }
+  }
+
+  /* NO BUTTON */
   #noBtn {
     background: #eee;
     color: #444;
     left: 50%;
     transform: translateX(-50%);
-    top: 90px;
+    top: 100px;
   }
 
+  /* CONFETTI + HEARTS */
   .confetti {
     position: fixed;
-    width: 8px;
-    height: 14px;
     top: 50%;
     left: 50%;
-    z-index: 9999;
+    font-size: 16px;
     animation: burst 3s ease-out forwards;
+    z-index: 9999;
   }
 
   @keyframes burst {
@@ -91,6 +99,22 @@
       transform: translate(var(--x), var(--y)) rotate(720deg);
       opacity: 0;
     }
+  }
+
+  .final-text {
+    font-family: 'Pacifico', cursive;
+    font-size: 32px;
+    color: #ff3366;
+    margin-top: 8px;
+  }
+
+  .share-btn {
+    margin-top: 18px;
+    background: #ff3366;
+    color: white;
+    padding: 12px 26px;
+    border-radius: 28px;
+    font-size: 15px;
   }
 </style>
 </head>
@@ -113,6 +137,7 @@
 
 <script>
   const music = document.getElementById("bgMusic");
+  let musicStarted = false;
 
   const noTexts = [
     "No 🙃",
@@ -128,12 +153,12 @@
   ];
 
   let noCount = 0;
-  let musicStarted = false;
+  let yesScale = 1;
 
   function startMusic() {
     if (!musicStarted) {
       music.volume = 0.6;
-      music.play().catch(() => {});
+      music.play().catch(()=>{});
       musicStarted = true;
     }
   }
@@ -142,6 +167,7 @@
     startMusic();
 
     const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
     const box = document.getElementById("btnBox");
 
     if (noCount < noTexts.length - 1) {
@@ -149,10 +175,10 @@
       noBtn.textContent = noTexts[noCount];
     }
 
+    // Move NO safely
     const maxX = box.clientWidth - noBtn.offsetWidth;
     const maxY = box.clientHeight - noBtn.offsetHeight;
 
-    // keep it far from YES (center top)
     let x, y;
     do {
       x = Math.random() * maxX;
@@ -162,16 +188,20 @@
     noBtn.style.left = x + "px";
     noBtn.style.top = y + "px";
     noBtn.style.transform = "none";
+
+    // Grow YES (subtle)
+    yesScale = Math.min(yesScale + 0.04, 1.25);
+    yesBtn.style.transform = `translateX(-50%) scale(${yesScale})`;
   }
 
   function launchConfetti() {
-    const colors = ["#ff3366","#ffcc00","#66ccff","#99ffcc","#ff99cc"];
-    for (let i = 0; i < 160; i++) {
+    const emojis = ["🎉","💖","💕","🎊","💘"];
+    for (let i = 0; i < 180; i++) {
       const c = document.createElement("div");
       c.className = "confetti";
-      c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      c.style.setProperty("--x", (Math.random() * 800 - 400) + "px");
-      c.style.setProperty("--y", (Math.random() * 800 - 400) + "px");
+      c.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      c.style.setProperty("--x", (Math.random() * 900 - 450) + "px");
+      c.style.setProperty("--y", (Math.random() * 900 - 450) + "px");
       document.body.appendChild(c);
       setTimeout(() => c.remove(), 3000);
     }
@@ -182,12 +212,25 @@
     launchConfetti();
 
     document.getElementById("card").innerHTML = `
-      <div style="text-align:center">
+      <div style="display:flex;flex-direction:column;align-items:center;">
         <h1 style="font-family:Pacifico;font-size:36px;color:#ff3366">YES 💖</h1>
         <img src="Bear2.gif" width="150">
-        <h2 style="font-family:Pacifico;font-size:30px;color:#ff3366">Happy Valentine’s Day 💕</h2>
+        <div class="final-text">Happy Valentine’s Day 💕</div>
+        <button class="share-btn" onclick="sharePage()">Share this page 💌</button>
       </div>
     `;
+  }
+
+  function sharePage() {
+    if (navigator.share) {
+      navigator.share({
+        title: "Valentine 💖",
+        text: "I made something cute for you 💕",
+        url: window.location.href
+      });
+    } else {
+      alert("Copy and share the link 💕");
+    }
   }
 </script>
 
